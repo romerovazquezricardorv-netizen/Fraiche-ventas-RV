@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#f6ece0">
+<title>FRAICHE — Meta diaria</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --amber:#a8632f;
+  --amber2:#c9884f;
+  --cream:#f6ece0;
+  --cream2:#efe1cf;
+  --ink:#2c2116;
+  --soft:#5c4a38;
+  --rose:#c97b6d;
+  --gold:#b08d57;
+  --line:#e3d2b8;
+  --white:#fffdf9;
+  --green:#7fa571;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  background:var(--cream);
+  color:var(--ink);
+  font-family:'Jost',sans-serif;
+  min-height:100vh;
+}
+
+button{font-family:inherit}
+
+.wrap{
+  max-width:520px;
+  margin:auto;
+  padding:28px 18px 60px;
+}
+
+header{text-align:center;margin-bottom:20px}
+
+.eyebrow{
+  font-size:11px;
+  letter-spacing:.28em;
+  text-transform:uppercase;
+  color:var(--gold);
+}
+
+h1{
+  font-family:'Cormorant Garamond',serif;
+  font-size:38px;
+  margin:3px 0 0;
+}
+
+.datebar{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:14px;
+  margin-top:14px;
+}
+
+.datebar button{
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  border:1px solid var(--line);
+  background:none;
+  font-size:18px;
+  color:var(--soft);
+}
+
+.date-label{
+  min-width:160px;
+  text-align:center;
+  font-size:14px;
+}
+
+.today-tag{
+  display:block;
+  font-size:10px;
+  color:var(--rose);
+  text-transform:uppercase;
+  letter-spacing:.1em;
+}
+
+.bottle-stage{
+  display:flex;
+  justify-content:center;
+  margin:20px 0 5px;
+}
+
+.bottle-svg{
+  width:120px;
+  height:190px;
+}
+
+.progress{text-align:center;margin-bottom:28px}
+
+.amount{
+  font-family:'Cormorant Garamond',serif;
+  font-size:44px;
+  font-weight:600;
+  color:var(--amber);
+}
+
+.goal{
+  font-size:13px;
+  color:var(--soft);
+}
+
+.status{
+  display:inline-block;
+  margin-top:10px;
+  padding:5px 14px;
+  border-radius:100px;
+  background:var(--cream2);
+  color:var(--soft);
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+
+.status.done{
+  background:#dcead9;
+  color:#4a6b3d;
+}
+
+.group{margin-bottom:23px}
+
+.group-title{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:10px;
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  color:var(--gold);
+}
+
+.group-title:after{
+  content:"";
+  height:1px;
+  background:var(--line);
+  flex:1;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+
+.product{
+  position:relative;
+  background:var(--white);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:14px 6px 12px;
+  text-align:center;
+  cursor:pointer;
+  touch-action:manipulation;
+}
+
+.product:active{
+  transform:scale(.96);
+  box-shadow:0 0 0 2px var(--amber2) inset;
+}
+
+.product .plus{
+  position:absolute;
+  top:5px;
+  right:8px;
+  color:var(--gold);
+}
+
+.product .ml{
+  display:block;
+  font-family:'Cormorant Garamond',serif;
+  font-size:22px;
+  font-weight:600;
+}
+
+.product .gain{
+  font-size:12px;
+  color:var(--amber);
+}
+
+.empty{
+  padding:20px 10px;
+  text-align:center;
+  border:1px dashed var(--line);
+  border-radius:12px;
+  color:var(--soft);
+  font-size:13px;
+}
+
+.sale{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px 4px;
+  border-bottom:1px solid var(--line);
+  font-size:14px;
+}
+
+.sale-right{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.sale-gain{
+  color:var(--amber);
+  font-weight:500;
+}
+
+.delete{
+  border:0;
+  background:none;
+  color:var(--rose);
+  font-size:17px;
+  cursor:pointer;
+}
+
+.week-strip{
+  display:flex;
+  justify-content:space-between;
+  background:var(--white);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:16px 12px;
+}
+
+.wk{
+  text-align:center;
+  flex:1;
+}
+
+.wk-day{
+  font-size:10px;
+  text-transform:uppercase;
+  color:var(--soft);
+}
+
+.track{
+  width:6px;
+  height:38px;
+  margin:6px auto;
+  background:var(--cream2);
+  border-radius:4px;
+  overflow:hidden;
+  display:flex;
+  align-items:flex-end;
+}
+
+.bar{
+  width:100%;
+  background:var(--amber2);
+  border-radius:4px;
+}
+
+.bar.hit{background:var(--green)}
+
+.wk-amt{
+  font-size:10px;
+  color:var(--soft);
+}
+
+.week-card{
+  margin-top:12px;
+  padding:17px 16px;
+  background:var(--white);
+  border:1px solid var(--line);
+  border-radius:16px;
+}
+
+.week-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+}
+
+.week-label{
+  font-size:11px;
+  color:var(--gold);
+  text-transform:uppercase;
+  letter-spacing:.12em;
+}
+
+.week-amount{
+  font-family:'Cormorant Garamond',serif;
+  font-size:31px;
+  font-weight:600;
+  color:var(--amber);
+}
+
+.week-goal{
+  text-align:right;
+  font-size:12px;
+  color:var(--soft);
+}
+
+.week-progress{
+  height:7px;
+  margin:14px 0 11px;
+  background:var(--cream2);
+  border-radius:100px;
+  overflow:hidden;
+}
+
+.week-progress-fill{
+  height:100%;
+  width:0%;
+  background:var(--amber2);
+}
+
+.week-progress-fill.done{background:var(--green)}
+
+.week-missing{
+  font-size:13px;
+  color:var(--soft);
+}
+
+.adjust{
+  border-top:1px solid var(--line);
+  margin-top:11px;
+  padding-top:11px;
+}
+
+.adjust-title{
+  font-size:12px;
+  font-weight:600;
+}
+
+.adjust-text{
+  margin-top:4px;
+  font-size:12px;
+  line-height:1.5;
+  color:var(--soft);
+}
+
+.adjust-text strong{color:var(--amber)}
+
+.reference{
+  margin-top:8px;
+  font-size:11px;
+  color:var(--soft);
+}
+
+.reset{
+  text-align:center;
+  margin-top:27px;
+}
+
+.reset button{
+  border:0;
+  background:none;
+  text-decoration:underline;
+  color:var(--soft);
+  font-size:12px;
+}
+
+.save-note{
+  margin-top:12px;
+  font-size:10px;
+  color:var(--soft);
+  opacity:.7;
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Ventas puerta a puerta</div>
+  <h1>FRAICHE</h1>
+
+  <div class="datebar">
+    <button id="prev">‹</button>
+    <div class="date-label" id="dateLabel"></div>
+    <button id="next">›</button>
+  </div>
+</header>
+
+<div class="bottle-stage">
+<svg class="bottle-svg" viewBox="0 0 100 160">
+<defs>
+<clipPath id="clip">
+<path d="M38 8 H62 V26 C62 26 74 34 74 52 V140 C74 150 66 156 58 156 H42 C34 156 26 150 26 140 V52 C26 34 38 26 38 26 Z"/>
+</clipPath>
+</defs>
+
+<path d="M38 8 H62 V26 C62 26 74 34 74 52 V140 C74 150 66 156 58 156 H42 C34 156 26 150 26 140 V52 C26 34 38 26 38 26 Z"
+fill="#fffdf9" stroke="#b08d57" stroke-width="1.5"/>
+
+<rect x="35" y="2" width="30" height="8" rx="2" fill="#b08d57"/>
+
+<g clip-path="url(#clip)">
+<rect id="fillRect" x="26" y="156" width="48" height="0" fill="#c9884f"/>
+</g>
+
+<path d="M38 8 H62 V26 C62 26 74 34 74 52 V140 C74 150 66 156 58 156 H42 C34 156 26 150 26 140 V52 C26 34 38 26 38 26 Z"
+fill="none" stroke="#2c2116" stroke-opacity=".15"/>
+</svg>
+</div>
+
+<div class="progress">
+  <div class="amount" id="dailyAmount">$0</div>
+  <div class="goal">de tu meta de <b>$333</b> al día</div>
+  <div class="status" id="status">arrancando</div>
+</div>
+
+<section class="group">
+<div class="group-title">Frascos</div>
+
+<div class="grid">
+<button class="product" data-name="Frasco 60ml" data-gain="93">
+<span class="plus">+</span>
+<span class="ml">60ml</span>
+<span class="gain">+$93</span>
+</button>
+
+<button class="product" data-name="Frasco 30ml" data-gain="55">
+<span class="plus">+</span>
+<span class="ml">30ml</span>
+<span class="gain">+$55</span>
+</button>
+
+<button class="product" data-name="Frasco 16ml" data-gain="31">
+<span class="plus">+</span>
+<span class="ml">16ml</span>
+<span class="gain">+$31</span>
+</button>
+</div>
+</section>
+
+<section class="group">
+<div class="group-title">Rellenos</div>
+
+<div class="grid">
+<button class="product" data-name="Relleno 60ml" data-gain="66">
+<span class="plus">+</span>
+<span class="ml">60ml</span>
+<span class="gain">+$66</span>
+</button>
+
+<button class="product" data-name="Relleno 30ml" data-gain="31">
+<span class="plus">+</span>
+<span class="ml">30ml</span>
+<span class="gain">+$31</span>
+</button>
+
+<button class="product" data-name="Relleno 16ml" data-gain="16">
+<span class="plus">+</span>
+<span class="ml">16ml</span>
+<span class="gain">+$16</span>
+</button>
+</div>
+</section>
+
+<section class="group">
+<div class="group-title">Ventas del día</div>
+<div id="salesList"></div>
+</section>
+
+<div class="week-strip" id="weekStrip"></div>
+
+<div class="week-card">
+
+<div class="week-top">
+<div>
+<div class="week-label">Esta semana</div>
+<div class="week-amount" id="weekAmount">$0</div>
+</div>
+
+<div class="week-goal">
+de<br><b>$2,000</b>
+</div>
+</div>
+
+<div class="week-progress">
+<div class="week-progress-fill" id="weekFill"></div>
+</div>
+
+<div class="week-missing" id="weekMissing"></div>
+
+<div class="adjust">
+<div class="adjust-title" id="adjustTitle">Meta reajustada</div>
+<div class="adjust-text" id="adjustText"></div>
+
+<div class="reference">
+Referencia fija: <b>$333 diarios</b> · Meta semanal: <b>$2,000</b>
+</div>
+</div>
+
+</div>
+
+<div class="reset">
+<button id="reset">Borrar ventas de este día</button>
+<div class="save-note">Tus ventas quedan guardadas en este dispositivo.</div>
+</div>
+
+</div>
+
+<script>
+(function(){
+
+const DAILY_GOAL = 333;
+const WEEK_GOAL = 2000;
+const STORAGE_KEY = "fraiche-sales-v3";
+
+const SHORT_DAYS = ["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
+const LONG_DAYS = ["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
+const MONTHS = ["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+
+let current = new Date();
+current.setHours(0,0,0,0);
+
+let data = {};
+
+function pad(n){
+  return n < 10 ? "0"+n : n;
+}
+
+function key(d){
+  return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+}
+
+function money(n){
+  return "$"+Math.round(n).toLocaleString("es-MX");
+}
+
+function same(a,b){
+  return a.getFullYear()===b.getFullYear() &&
+         a.getMonth()===b.getMonth() &&
+         a.getDate()===b.getDate();
+}
+
+function total(arr){
+  return (arr||[]).reduce((s,x)=>s+Number(x.gain||0),0);
+}
+
+function mondayOf(d){
+  const x = new Date(d);
+  const dow = x.getDay();
+  x.setDate(x.getDate()+(dow===0?-6:1-dow));
+  x.setHours(0,0,0,0);
+  return x;
+}
+
+function load(){
+  try{
+    const stored = localStorage.getItem(STORAGE_KEY);
+    data = stored ? JSON.parse(stored) : {};
+  }catch(e){
+    data = {};
+  }
+
+  render();
+}
+
+function save(){
+  try{
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
+  }catch(e){
+    console.log(e);
+  }
+}
+
+function currentSales(){
+  return data[key(current)] || [];
+}
+
+function setCurrentSales(arr){
+  data[key(current)] = arr;
+  save();
+}
+
+function renderDate(){
+
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
+  let html =
+    SHORT_DAYS[current.getDay()] +
+    ", " +
+    current.getDate() +
+    " " +
+    MONTHS[current.getMonth()];
+
+  if(same(current,today)){
+    html += '<span class="today-tag">Hoy</span>';
+  }
+
+  document.getElementById("dateLabel").innerHTML = html;
+}
+
+function renderDaily(){
+
+  const amount = total(currentSales());
+
+  document.getElementById("dailyAmount").textContent = money(amount);
+
+  const pct = Math.min(1,amount/DAILY_GOAL);
+  const bottleHeight = 130;
+  const h = bottleHeight*pct;
+
+  const fill = document.getElementById("fillRect");
+
+  fill.setAttribute("y",156-h);
+  fill.setAttribute("height",h);
+
+  const status = document.getElementById("status");
+
+  if(amount >= DAILY_GOAL){
+    status.textContent = "meta cumplida ✓";
+    status.classList.add("done");
+  }else{
+    status.textContent = "faltan "+money(DAILY_GOAL-amount);
+    status.classList.remove("done");
+  }
+}
+
+function renderSales(){
+
+  const arr = currentSales();
+  const box = document.getElementById("salesList");
+
+  if(!arr.length){
+    box.innerHTML =
+    '<div class="empty">Aún no registras ventas. Toca un producto arriba cuando cierres una venta.</div>';
+    return;
+  }
+
+  box.innerHTML = arr.map((x,i)=>`
+  <div class="sale">
+    <span>${x.name}</span>
+
+    <span class="sale-right">
+      <span class="sale-gain">+${money(x.gain)}</span>
+      <button class="delete" data-index="${i}">✕</button>
+    </span>
+  </div>
+  `).join("");
+}
+
+function weekData(){
+
+  const monday = mondayOf(current);
+  const days = [];
+  const totals = [];
+
+  for(let i=0;i<6;i++){
+    const d = new Date(monday);
+    d.setDate(monday.getDate()+i);
+
+    days.push(d);
+    totals.push(total(data[key(d)]||[]));
+  }
+
+  return {
+    monday,
+    days,
+    totals,
+    sum:totals.reduce((a,b)=>a+b,0)
+  };
+}
+
+function renderWeek(){
+
+  const w = weekData();
+
+  document.getElementById("weekStrip").innerHTML =
+  w.days.map((d,i)=>{
+
+    const amount = w.totals[i];
+    const pct = Math.min(100,(amount/DAILY_GOAL)*100);
+    const hit = amount>=DAILY_GOAL;
+
+    return `
+    <div class="wk" style="opacity:${same(d,current)?1:.65}">
+      <div class="wk-day">${SHORT_DAYS[d.getDay()]}</div>
+
+      <div class="track">
+        <div class="bar ${hit?"hit":""}" style="height:${pct}%"></div>
+      </div>
+
+      <div class="wk-amt">${amount?money(amount):"—"}</div>
+    </div>
+    `;
+  }).join("");
+
+  document.getElementById("weekAmount").textContent = money(w.sum);
+
+  const missing = Math.max(0,WEEK_GOAL-w.sum);
+
+  document.getElementById("weekMissing").innerHTML =
+    w.sum >= WEEK_GOAL
+    ? "Meta semanal cumplida <b>✓</b>"
+    : "Faltan <b>"+money(missing)+"</b>";
+
+  const pct = Math.min(100,(w.sum/WEEK_GOAL)*100);
+
+  const fill = document.getElementById("weekFill");
+  fill.style.width = pct+"%";
+
+  if(w.sum>=WEEK_GOAL){
+    fill.classList.add("done");
+  }else{
+    fill.classList.remove("done");
+  }
+
+  renderAdjustment(w);
+}
+
+function renderAdjustment(w){
+
+  const title = document.getElementById("adjustTitle");
+  const text = document.getElementById("adjustText");
+
+  if(w.sum >= WEEK_GOAL){
+
+    title.textContent = "Meta semanal cumplida";
+
+    text.innerHTML =
+    "Ya llegaste a <strong>$2,000</strong>. Todo lo que vendas después queda por encima de tu meta.";
+
+    return;
+  }
+
+  if(current.getDay()===0){
+
+    title.textContent = "Semana cerrada";
+
+    text.innerHTML =
+    "La semana terminó con <strong>"+
+    money(w.sum)+
+    "</strong>. Faltaron <strong>"+
+    money(WEEK_GOAL-w.sum)+
+    "</strong>.";
+
+    return;
+  }
+
+  const remainingDays = [];
+
+  for(let i=1;i<=6;i++){
+
+    const d = new Date(current);
+    d.setDate(d.getDate()+i);
+
+    if(!same(mondayOf(d),w.monday)){
+      break;
+    }
+
+    if(d.getDay()>=1 && d.getDay()<=6){
+      remainingDays.push(d);
+    }
+  }
+
+  if(!remainingDays.length){
+
+    title.textContent = "Cierre de semana";
+
+    text.innerHTML =
+    "Hoy es el último día de venta. Te faltan <strong>"+
+    money(WEEK_GOAL-w.sum)+
+    "</strong> para llegar a $2,000.";
+
+    return;
+  }
+
+  const missing = WEEK_GOAL-w.sum;
+  const perDay = Math.ceil(missing/remainingDays.length);
+
+  const names = remainingDays.map(d=>LONG_DAYS[d.getDay()]);
+
+  let daysText;
+
+  if(names.length===1){
+    daysText = names[0];
+  }else if(names.length===2){
+    daysText = names[0]+" y "+names[1];
+  }else{
+    daysText =
+      names.slice(0,-1).join(", ") +
+      " y " +
+      names[names.length-1];
+  }
+
+  title.textContent = "Meta reajustada para cerrar en $2,000";
+
+  text.innerHTML =
+  "Te faltan <strong>"+
+  money(missing)+
+  "</strong>. Si lo repartes entre "+
+  remainingDays.length+
+  " días restantes ("+
+  daysText+
+  "), busca aproximadamente <strong>"+
+  money(perDay)+
+  " por día</strong>.";
+}
+
+function render(){
+  renderDate();
+  renderDaily();
+  renderSales();
+  renderWeek();
+}
+
+document.querySelectorAll(".product").forEach(btn=>{
+
+  btn.addEventListener("click",function(){
+
+    const arr = currentSales().slice();
+
+    arr.push({
+      name:this.dataset.name,
+      gain:Number(this.dataset.gain),
+      time:Date.now()
+    });
+
+    setCurrentSales(arr);
+    render();
+  });
+});
+
+document.getElementById("salesList").addEventListener("click",function(e){
+
+  const del = e.target.closest(".delete");
+
+  if(!del) return;
+
+  const arr = currentSales().slice();
+
+  arr.splice(Number(del.dataset.index),1);
+
+  setCurrentSales(arr);
+  render();
+});
+
+document.getElementById("prev").addEventListener("click",function(){
+  current.setDate(current.getDate()-1);
+  render();
+});
+
+document.getElementById("next").addEventListener("click",function(){
+  current.setDate(current.getDate()+1);
+  render();
+});
+
+document.getElementById("reset").addEventListener("click",function(){
+
+  if(!confirm("¿Borrar todas las ventas registradas de este día?")){
+    return;
+  }
+
+  setCurrentSales([]);
+  render();
+});
+
+load();
+
+})();
+</script>
+
+</body>
+                                           </html>
